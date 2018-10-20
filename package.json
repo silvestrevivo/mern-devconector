@@ -1,0 +1,38 @@
+{
+  "name": "mern-devconnector",
+  "version": "1.0.0",
+  "description": "Web application using MERN stack following the Udemy tutorial from @bradtraversy",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silvestrevivo/mern-devconnector.git"
+  },
+  "keywords": [
+    "mern",
+    "react",
+    "redux",
+    "node",
+    "mongodb",
+    "udemy"
+  ],
+  "author": "@silvestrevivo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silvestrevivo/mern-devconnector/issues"
+  },
+  "homepage": "https://github.com/silvestrevivo/mern-devconnector#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.3.4",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.8.0"
+  }
+}
