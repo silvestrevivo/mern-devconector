@@ -1,9 +1,11 @@
 'use strict'
 
-const { User, validateUser } = require('../models/User')
+const { User, validateUser, validateLoginUser } = require('../models/User')
 const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const SALT_I = 10
+const jwt = require('jsonwebtoken')
+const config = require('../config/keys').get(process.env.NODE_ENV)
 
 // Register new user
 function registerUser(req, res) {
@@ -51,6 +53,38 @@ function registerUser(req, res) {
   })
 }
 
+// Login user
+function loginUser(req, res) {
+  // Validation of input using Joi to expose in front-end
+  const { error } = validateLoginUser(req.body)
+  if (error) return res.status(409).json({ validation: error.details[0].message })
+
+  const { email, password } = req.body
+  User.findOne({ email }, (err, user) => {
+    if (err) return res.status(500).send({ message: `Error in the request: ${err}.` })
+
+    if (!user) return res.status(400).json({ isAuth: false, message: 'Email user not found!' })
+
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (!isMatch)
+        return res.status(400).json({
+          isAuth: false,
+          message: 'Wrong user password',
+        })
+
+      // if the mail is found and the password matchs, a new token is generated
+      const payload = { id: user.id, name: user.name, avatar: user.avatar }
+
+      jwt.sign(payload, config.SECRET, { expiresIn: 3600 }, (err, token) => {
+        if (err) return res.status(400).send({ message: `token not generated, error: ${err}` })
+
+        res.status(200).json({ isAuth: true, token: `Bearen ${token}` })
+      })
+    })
+  })
+}
+
 module.exports = {
   registerUser,
+  loginUser,
 }

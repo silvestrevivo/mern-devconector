@@ -69,7 +69,25 @@ function validateUser(user) {
   return Joi.validate(user, schema)
 }
 
+function validateLoginUser(user) {
+  // this is validation for the front-end using Joi
+  const schema = {
+    email: Joi.string()
+      .min(5)
+      .max(255)
+      .required()
+      .email(),
+    password: Joi.string()
+      .min(5)
+      .max(255)
+      .required(),
+  }
+
+  return Joi.validate(user, schema)
+}
+
 module.exports = {
   User,
   validateUser,
+  validateLoginUser,
 }
