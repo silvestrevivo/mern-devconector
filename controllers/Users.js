@@ -78,13 +78,26 @@ function loginUser(req, res) {
       jwt.sign(payload, config.SECRET, { expiresIn: 3600 }, (err, token) => {
         if (err) return res.status(400).send({ message: `token not generated, error: ${err}` })
 
-        res.status(200).json({ isAuth: true, token: `Bearen ${token}` })
+        res.status(200).json({ isAuth: true, token: `Bearer ${token}` })
       })
     })
+  })
+}
+
+// Protected route user
+function protectedRouteUser(req, res) {
+  let user = req.user
+  res.status(200).json({
+    isAuth: true,
+    id: user.id,
+    name: user.name,
+    lastname: user.lastname,
+    email: user.email,
   })
 }
 
 module.exports = {
   registerUser,
   loginUser,
+  protectedRouteUser,
 }

@@ -9,11 +9,16 @@ const profile = require('./routes/api/profile')
 
 // we run the app
 const app = express()
-app.get('/', (req, res) => res.send('hello, this is root directory'))
 
 // middlewares
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+
+// Passport middleware
+app.use(passport.initialize())
+
+// Passport strategy - config
+require('./config/passport')(passport)
 
 // calling api routers to use end points
 app.use('/api/users', users)
