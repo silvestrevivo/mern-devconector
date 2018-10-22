@@ -11,12 +11,12 @@ const config = require('../config/keys').get(process.env.NODE_ENV)
 function registerUser(req, res) {
   // Validation of input using Joi to expose in front-end
   const { error } = validateUser(req.body)
-  if (error) return res.status(409).json({ validation: error.details[0].message })
+  if (error) return res.status(409).json({ message: error.details[0].message, path: error.details[0].path[0] })
 
   User.findOne({ email: req.body.email }, (err, user) => {
     // Handling errors in the backend
     if (err) return res.status(500).send({ message: `Error in the request: ${err}.` })
-    if (user) return res.status(400).json({ message: `Email already exists!` })
+    if (user) return res.status(400).json({ message: `Email already exists!`, path: 'email' })
 
     // Success in request
     const avatar = gravatar.url(req.body.email, {
@@ -57,7 +57,7 @@ function registerUser(req, res) {
 function loginUser(req, res) {
   // Validation of input using Joi to expose in front-end
   const { error } = validateLoginUser(req.body)
-  if (error) return res.status(409).json({ validation: error.details[0].message })
+  if (error) return res.status(409).json({ message: error.details[0].message, path: error.details[0].path[0] })
 
   const { email, password } = req.body
   User.findOne({ email }, (err, user) => {

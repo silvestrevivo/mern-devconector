@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+import className from 'classnames'
 
 class Login extends Component {
   state = {
     email: '',
     password: '',
+    error: '',
+    path: '',
   }
 
   onChange = e => {
@@ -17,11 +21,22 @@ class Login extends Component {
     e.preventDefault()
     const { email, password } = this.state
     const user = { email, password }
-    console.log('user', user)
+    axios
+      .post('/api/users/login', user)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err.response.data)
+        this.setState({
+          error: err.response.data.message,
+          path: err.response.data.path,
+        })
+      })
   }
 
   render() {
-    const { email, password } = this.state
+    const { email, password, error, path } = this.state
     return (
       <div className="login">
         <div className="container">
@@ -33,7 +48,9 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="email"
-                    className="form-control form-control-lg"
+                    className={className('form-control form-control-lg', {
+                      'is-invalid': path === 'email',
+                    })}
                     placeholder="Email Address"
                     name="email"
                     value={email}
@@ -43,7 +60,9 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="password"
-                    className="form-control form-control-lg"
+                    className={className('form-control form-control-lg', {
+                      'is-invalid': path === 'password',
+                    })}
                     placeholder="Password"
                     name="password"
                     value={password}
@@ -52,6 +71,7 @@ class Login extends Component {
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
+              <p className="text-danger text-center mt-2">{error}</p>
             </div>
           </div>
         </div>

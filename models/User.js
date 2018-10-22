@@ -63,6 +63,16 @@ function validateUser(user) {
       .min(5)
       .max(255)
       .required(),
+    ['Confirm password']: Joi.string()
+      .required()
+      .valid(Joi.ref('password'))
+      .options({
+        language: {
+          any: {
+            allowOnly: ' does not match!!',
+          },
+        },
+      }),
     avatar: Joi.string(),
   }
 

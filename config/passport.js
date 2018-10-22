@@ -21,8 +21,7 @@ module.exports = passport => {
           }
           return done(null, false)
         })
-        .catch(err => console.log(err))
-      //! I think this has to be catched on another way
+        .catch(err => err.response.message)
     }),
   )
 }
