@@ -22,6 +22,12 @@ class Register extends PureComponent {
     path: '',
   }
 
+  componentDidMount() {
+    if (this.props.auth.isAuth) {
+      this.props.history.push('/dashboard')
+    }
+  }
+
   onChange = e => {
     const { name, value } = e.target
     this.setState({
