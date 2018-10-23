@@ -1,8 +1,16 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { PureComponent } from 'react'
+import { connect } from 'react-redux'
+import { loginUser } from '../../actions/authActions'
+import PropTypes from 'prop-types'
 import className from 'classnames'
 
-class Login extends Component {
+class Login extends PureComponent {
+  static propTypes = {
+    error: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+    loginUser: PropTypes.func.isRequired,
+  }
+
   state = {
     email: '',
     password: '',
@@ -19,24 +27,24 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault()
+    const { loginUser } = this.props
     const { email, password } = this.state
     const user = { email, password }
-    axios
-      .post('/api/users/login', user)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(err => {
-        console.log(err.response.data)
-        this.setState({
-          error: err.response.data.message,
-          path: err.response.data.path,
-        })
-      })
+    loginUser(user)
+  }
+
+  componentDidUpdate() {
+    if (this.props.auth.isAuth) {
+      this.props.history.push('/dashboard')
+    }
+    this.setState({
+      error: this.props.error.message,
+      path: this.props.error.path,
+    })
   }
 
   render() {
-    const { email, password, error, path } = this.state
+    const { email, password, path, error } = this.state
     return (
       <div className="login">
         <div className="container">
@@ -80,4 +88,14 @@ class Login extends Component {
   }
 }
 
-export default Login
+const mapStateToProps = state => {
+  return {
+    auth: state.auth,
+    error: state.error,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { loginUser },
+)(Login)

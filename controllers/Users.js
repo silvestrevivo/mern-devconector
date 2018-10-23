@@ -73,7 +73,12 @@ function loginUser(req, res) {
         })
 
       // if the mail is found and the password matchs, a new token is generated
-      const payload = { id: user.id, name: user.name, avatar: user.avatar }
+      const payload = {
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        avatar: user.avatar,
+      }
 
       jwt.sign(payload, config.SECRET, { expiresIn: 3600 }, (err, token) => {
         if (err) return res.status(400).send({ message: `token not generated, error: ${err}` })

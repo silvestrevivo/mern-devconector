@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import className from 'classnames'
 import { connect } from 'react-redux'
 import { registerUser } from '../../actions/authActions'
 
-class Register extends Component {
+class Register extends PureComponent {
   static propTypes = {
     error: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
@@ -18,6 +18,8 @@ class Register extends Component {
     email: '',
     password: '',
     password2: '',
+    error: '',
+    path: '',
   }
 
   onChange = e => {
@@ -33,10 +35,15 @@ class Register extends Component {
     this.props.registerUser({ name, lastname, email, password, 'Confirm password': password2 }, this.props.history)
   }
 
+  componentDidUpdate() {
+    this.setState({
+      error: this.props.error.message,
+      path: this.props.error.path,
+    })
+  }
+
   render() {
-    console.log('props', this.props)
-    const { error, path } = this.props
-    const { name, lastname, email, password, password2 } = this.state
+    const { name, lastname, email, password, password2, error, path } = this.state
     return (
       <div className="register">
         <div className="container">
@@ -110,7 +117,7 @@ class Register extends Component {
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
-              <p className="text-danger text-center mt-2">{error && error.message}</p>
+              <p className="text-danger text-center mt-2">{error}</p>
             </div>
           </div>
         </div>
