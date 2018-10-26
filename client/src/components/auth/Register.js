@@ -58,8 +58,6 @@ class Register extends PureComponent {
   }
 
   render() {
-    console.log('state in register', this.state)
-    console.log('props in register', this.props)
     const { name, lastname, email, password, password2, error, path } = this.state
     return (
       <div className="register">

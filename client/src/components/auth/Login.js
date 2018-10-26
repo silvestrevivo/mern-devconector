@@ -59,8 +59,6 @@ class Login extends PureComponent {
   }
 
   render() {
-    console.log('state in login', this.state)
-    console.log('props in login', this.props)
     const { email, password, path, error } = this.state
     return (
       <div className="login">
