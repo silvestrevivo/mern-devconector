@@ -4,13 +4,20 @@ import jwt_decode from 'jwt-decode'
 
 import { GET_ERRORS } from './types'
 import { SET_CURRENT_USER } from './types'
+import { CLEAN_REGISTER_ERRORS } from './types'
 
 // Register User
 export function registerUser(userData, history) {
   return dispatch => {
     axios
       .post('/api/users/register', userData)
-      .then(response => history.push('/login'))
+      .then(response => {
+        history.push('/login')
+        dispatch({
+          type: CLEAN_REGISTER_ERRORS,
+          payload: {}
+        })
+      })
       .catch(err => {
         dispatch({
           type: GET_ERRORS,
